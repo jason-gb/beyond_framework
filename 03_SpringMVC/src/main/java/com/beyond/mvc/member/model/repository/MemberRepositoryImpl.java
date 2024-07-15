@@ -28,6 +28,40 @@ public class MemberRepositoryImpl implements MemberRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public int insertMember(Member member) {
+		String query = "INSERT INTO tb_member VALUES(NULL, ?,?,DEFAULT,?,?,?,?,?,DEFAULT,DEFAULT,DEFAULT)";
+		
+		return jdbcTemplate.update(query, (pstmt) -> {
+			pstmt.setString(1, member.getId());
+			pstmt.setString(2, member.getPassword());
+			pstmt.setString(3, member.getName());
+			pstmt.setString(4, member.getPhone());
+			pstmt.setString(5, member.getEmail());
+			pstmt.setString(6, member.getAddress());
+			pstmt.setString(7, member.getHobby());});
+	}
+
+	@Override
+	public int updateMember(Member member) {
+		String query = "UPDATE tb_member SET name =?,phone=?,email=?,address=?,hobby=?,modify_date=CURDATE() WHERE no=?";
+		
+		return jdbcTemplate.update(query, (pstmt) -> {
+			pstmt.setString(1, member.getName());
+			pstmt.setString(2, member.getPhone());
+			pstmt.setString(3, member.getEmail());
+			pstmt.setString(4, member.getAddress());
+			pstmt.setString(5, member.getHobby());
+			pstmt.setInt(6, member.getNo());});
+	}
+	
+	@Override
+	public int deleteMember(int no) {
+		String query = "DELETE FROM tb_member where no=?";
+		
+		return jdbcTemplate.update(query, pstmt -> pstmt.setInt(1, no));
+	}
 	
 	private static class MemberRowMapper implements RowMapper<Member> {
         @Override
@@ -50,5 +84,8 @@ public class MemberRepositoryImpl implements MemberRepository {
             return member;
         }
     }
+
+
+
 
 }

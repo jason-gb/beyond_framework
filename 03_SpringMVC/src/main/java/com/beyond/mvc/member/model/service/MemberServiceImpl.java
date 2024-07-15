@@ -1,5 +1,7 @@
 package com.beyond.mvc.member.model.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,34 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		return member;
+	}
+
+	@Override
+	@Transactional
+	public int save(Member member) {
+		int result = 0;
+		
+		if (member.getNo() > 0) {
+			// update
+			result = repository.updateMember(member);
+		} else {
+			// insert
+			result = repository.insertMember(member);
+		}
+		
+//		if (true) {
+//			throw new RuntimeException();
+//		}
+		
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public int delete(int no) {
+		int result = 0;
+		
+		return result = repository.deleteMember(no);
 	}
 
 }

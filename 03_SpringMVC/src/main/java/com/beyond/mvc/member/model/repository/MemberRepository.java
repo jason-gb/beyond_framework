@@ -6,4 +6,10 @@ public interface MemberRepository {
 
 	Member findMemberById(String userId);
 
+	int insertMember(Member member);
+
+	int updateMember(Member member);
+
+	int deleteMember(int no);
+
 }

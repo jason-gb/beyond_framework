@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.beyond.mvc.member.model.service.MemberService;
 import com.beyond.mvc.member.model.vo.Member;
 
 @Controller
+@SessionAttributes("loginMember")
 public class MemberController {
 	private static final Logger log = LoggerFactory.getLogger(MemberController.class);
 	
@@ -85,46 +90,167 @@ public class MemberController {
 //		- Model 객체는 컨트롤러에서 데이터를 뷰로 전달하고자 할 때 사용하는 객체이다.
 //		- Model 객체는 전달하고자 하는 데이터를 맵 형식(key,value) 로 담을 수 있다
 //		- Mode 객체의 scope는 Request이다.
+//	@Autowired
+//	private MemberService service;
+//	
+//	@PostMapping("/login")
+//	public String login(@RequestParam String userId, 
+//			@RequestParam String userPwd, 
+//			HttpSession session,
+//			Model model) {
+//	
+//		log.debug("login() 호출 - {} {}", userId, userPwd);
+//		
+//		Member loginMember = service.login(userId, userPwd);
+//		
+//		if (loginMember != null) {
+//			session.setAttribute("loginMember", loginMember);
+//			
+//			return "redirect:/";
+//		} else {
+//			model.addAttribute("msg","아이디나 패스워드가 틀림");
+//			model.addAttribute("location","/");
+//			
+//			return "common/msg";
+//		}
+//		
+//	
+//	}
+//	
+//	// 로그아웃 구현
+//	@PostMapping("/logout")
+//	public String logout(HttpSession session) {
+//		
+//		session.invalidate();
+//		
+//		return "redirect:/";
+//	}
+	
 	@Autowired
 	private MemberService service;
 	
+	/*
+	 * @SessonAttribute와 ModelAndView 객체 사용
+	 *  1) ModelAndView
+	 * 		- 뷰에 대한 정보와 뷰로 전달할 데이터를 담는 객체이다
+	 *  2) @SessionAttributes("Attribute 이름")
+	 *  	-  Model 객체에서 "Attribute 이름" 에 해당하는 Attribute를 Session Scope까지 범위를 확장하는 어노테이션이다.
+	 */
+	// 로그인 구현
 	@PostMapping("/login")
-	public String login(@RequestParam String userId, 
-			@RequestParam String userPwd, 
-			HttpSession session,
-			Model model) {
+	public ModelAndView login(@RequestParam String userId, 
+									@RequestParam String userPwd, 
+									ModelAndView modelAndView) {
 	
 		log.debug("login() 호출 - {} {}", userId, userPwd);
 		
 		Member loginMember = service.login(userId, userPwd);
 		
 		if (loginMember != null) {
-			session.setAttribute("loginMember", loginMember);
+			modelAndView.addObject("loginMember", loginMember);
 			
-			return "redirect:/";
+			modelAndView.setViewName("redirect:/");
 		} else {
-			model.addAttribute("msg","아이디나 패스워드가 틀림");
-			model.addAttribute("location","/");
-			
-			return "common/msg";
+			modelAndView.addObject("msg","아이디나 패스워드가 틀림");
+			modelAndView.addObject("location","/");
+			modelAndView.setViewName( "common/msg");
 		}
-		
 	
+		return modelAndView;
 	}
 	
 	// 로그아웃 구현
 	@PostMapping("/logout")
-	public String logout(HttpSession session) {
+	public String logout(SessionStatus status) {
 		
-		session.invalidate();
+		// 세션 스코프로 확장된 객체들을 지워준다.
+		status.setComplete();
 		
 		return "redirect:/";
 	}
 	
+	@GetMapping("/member/enroll") 
+	public void enrollView() {
+		// String으로 반환타입 주고 진행해야하는데 매핑과 리턴값이 똑같으면 void 주고 리턴 안줘도됨
+		log.info("enrollView() - 호출");
+	}
 	
+	@PostMapping("/member/enroll") 
+	public ModelAndView enroll(ModelAndView modelAndView , Member member) {
+		int result = 0;
+		
+		result = service.save(member);
+		
+		if (result > 0) {
+			modelAndView.addObject("msg","회원 가입 성공");
+			modelAndView.addObject("location", "/");
+		} else {
+			modelAndView.addObject("msg","회원 가입 실패");
+			modelAndView.addObject("location", "/member/enroll");
+		}
+		
+		modelAndView.setViewName("common/msg");
+		
+		return modelAndView;
+	}
 	
+	@GetMapping("member/info")
+	public String info() {
+		
+		log.info("***********info() 호출 ***********");
+		
+		return "member/info";
+	}
 	
+	@PostMapping("member/update")
+	public ModelAndView update (ModelAndView modelAndView, 
+													Member member,
+													@SessionAttribute(name = "loginMember") Member loginMember) {
+		int result = 0;
+		
+		loginMember.setName(member.getName());
+		loginMember.setPhone(member.getPhone());
+		loginMember.setAddress(member.getAddress());
+		loginMember.setEmail(member.getEmail());
+		loginMember.setHobby(member.getHobby());
+		
+		result = service.save(loginMember);
+		
+		if (result > 0) {
+			modelAndView.addObject("msg","회원 정보 수정 성공");
+			modelAndView.addObject("location", "/member/info");
+		} else {
+			modelAndView.addObject("msg","회원 정보 수정 실패");
+			modelAndView.addObject("location", "/member/info");
+		}
+		
+		modelAndView.setViewName("common/msg");
+		
+		return modelAndView;
+	}
 	
+	@GetMapping("member/delete")
+	public ModelAndView delete(ModelAndView modelAndView,
+												SessionStatus status,
+												@SessionAttribute(name = "loginMember") Member loginMember) {
+		
+		int result = 0;
+		
+		result = service.delete(loginMember.getNo());
+		
+		if (result > 0) {
+			status.setComplete();
+			modelAndView.addObject("msg","회원 탈퇴 성공");
+			modelAndView.addObject("location", "/");
+		} else {
+			modelAndView.addObject("msg","회원 탈퇴 실패");
+			modelAndView.addObject("location", "/member/info");
+		}
+		
+		modelAndView.setViewName("common/msg");
+		
+		return modelAndView;
+	}
 	
 }                        
 
