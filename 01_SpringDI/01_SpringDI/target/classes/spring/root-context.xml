@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--  
+	Owner hong = new Owner();
+	
+	hong.setName("홍길동");
+	hong.setAge(34);
+	hong.setPet(dog);
+		
+	<bean id="hong" class="com.beyond.di.owner.Owner">
+		<property name="name" value="홍길동"/>
+		<property name="age" value="34"/>
+		<property name="pet" ref="dog"/>
+	</bean>
+	-->
+	<bean id="hong" class="com.beyond.di.owner.Owner"
+			p:name="홍길동" p:age="36" p:pet-ref="dog"/>
+		
+	<!--  
+		Owner lee = new Owner("이몽룡", 28, cat);
+	-->
+	<bean id="lee" class="com.beyond.di.owner.Owner">
+		<constructor-arg name="name" value="이몽룡"/>
+		<constructor-arg name="age" value="28"/>
+		<constructor-arg name="pet" ref="dog"/>
+	</bean>
+	
+	<!--  
+	Dog dog = new Dog();
+	
+	dog.setName("멍멍이");
+		
+	<bean id="dog" class="com.beyond.di.pet.Dog">
+		<property name="name" value="멍멍이"/>
+	</bean>
+	-->
+	<bean id="dog" class="com.beyond.di.pet.Dog" p:name="댕댕이"/>
+	
+	<!-- 
+		Cat cat = new Cat("야옹이");
+	 -->
+	<bean id="cat" class="com.beyond.di.pet.Cat">
+		<constructor-arg name="name" value="야옹이"/>
+	</bean>
+
+
+
+
+
+
+
+
+
+
+</beans>
