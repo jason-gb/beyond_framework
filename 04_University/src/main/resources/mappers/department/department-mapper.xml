@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.beyond.university.student.model.mapper.DepartmentMapper">
+	<select id="selectAll" parameterType="Department">
+		SELECT department_no AS 'no',
+ 			   department_name AS 'name',
+			   category ,
+			   open_yn AS 'openyn',
+			   capacity
+		FROM tb_department
+		ORDER BY department_name ASC
+	</select>
+</mapper>
+
+
