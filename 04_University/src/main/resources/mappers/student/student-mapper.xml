@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.beyond.university.student.model.mapper.StudentMapper">
+	<!-- 중복되는 쿼리 내용을 재사용하기 위한 sql조각으로 사용하려는 태그보다 위에 있어야 한다.-->
+	<sql id="selectStudentSql">
+		SELECT student_no,
+			 department_no,
+			 student_name,
+			 student_ssn,
+			 student_address,
+			 entrance_date,
+			 absence_yn,
+			 coach_professor_no
+		FROM tb_student
+	</sql>
+
+	<!-- 
+		외부에서 전달받는 파라미터가 있으면 해당하는 파라미터의 타입을 지정해야 한다. (parameterType="string)
+	 	외부에서 전달받은 파라미터 값은 #{파라미터 명} 표현법으로 가져올 수 있다.
+	 -->
+	 <resultMap id="StudentResultMap" type="Student">
+	 	<id property="no" column="student_no"/>
+	 	<result property="deptNo" column="department_no"/>
+	 	<result property="name" column="student_name"/>
+	 	<result property="ssn" column="student_ssn"/>
+	 	<result property="address" column="student_address"/>
+	 	<result property="entranceDate" column="entrance_date"/>
+	 	<result property="absenceYn" column="absence_yn"/>
+	 	<result property="coachProfessorNo" column="coach_professor_no"/>
+	 </resultMap>
+	 
+	<select id="selectAllByDeptNo" parameterType="string" resultMap="StudentResultMap">
+		<!--SELECT student_no,
+			 department_no,
+			 student_name,
+			 student_ssn,
+			 student_address,
+			 entrance_date,
+			 absence_yn,
+			 coach_professor_no
+		FROM tb_student
+		WHERE department_no = #{deptNo}
+		-->
+		<include refid="selectStudentSql"/>
+		WHERE department_no = #{deptNo}
+	</select>
+	
+	<select id="selectStudentByNo" parameterType="string" resultMap="StudentResultMap">
+		<include refid="selectStudentSql"/>
+		WHERE student_no = #{sno}
+	</select>
+	
+	<insert id="insertStudent">
+		<selectKey resultType="string" keyProperty="no" order="BEFORE">
+			SELECT CONCAT('A', RPAD(FLOOR((RAND() * 100000) + 1), 6, '0'))
+		</selectKey>
+		INSERT INTO tb_student (
+            student_no,
+            department_no,
+            student_name,
+            student_ssn, 
+            student_address,
+            entrance_date,
+            absence_yn,
+            coach_professor_no
+        ) VALUES (
+            #{no},
+            #{deptNo},
+            #{name},
+            #{ssn},
+            #{address},
+            CURDATE(),
+            'N',
+            NULL
+        )
+	</insert>
+	
+	
+</mapper>

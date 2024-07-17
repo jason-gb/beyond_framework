@@ -12,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
-	
+
 	private final DepartmentMapper mapper;
+	
 	@Override
 	public List<Department> getDepartments() {
 		// TODO Auto-generated method stub
