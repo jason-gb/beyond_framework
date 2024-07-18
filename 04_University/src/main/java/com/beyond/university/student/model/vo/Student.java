@@ -11,11 +11,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Student {
 	private String no;
+	
 	private String deptNo;
+	
+	private Department department;
+	
 	private String name;
+	
 	private String ssn;
+	
 	private String address;
+	
 	private LocalDate entranceDate;
+	
 	private String absenceYn;
+	
 	private String coachProfessorNo;
-}
+	
+}       

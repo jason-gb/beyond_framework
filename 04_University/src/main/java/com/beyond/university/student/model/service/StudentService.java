@@ -6,10 +6,12 @@ import com.beyond.university.student.model.vo.Student;
 
 public interface StudentService {
 
-	List<Student> getStudentsByDeptNo(String deptNo);
+    List<Student> getStudentsByDeptNo(String deptNo);
 
-	Student getStudentsByNo(String sno);
+    Student getStudentByNo(String sno);
 
-	int save(Student student);
+    int save(Student student);
+
+    int delete(String sno);
 
 }

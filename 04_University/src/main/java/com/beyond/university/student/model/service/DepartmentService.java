@@ -6,6 +6,7 @@ import com.beyond.university.student.model.vo.Department;
 
 public interface DepartmentService {
 
-	List<Department> getDepartments();
+    List<Department> getDepartments();
 
+    Department getDepartmentByDeptNo(String deptNo);
 }

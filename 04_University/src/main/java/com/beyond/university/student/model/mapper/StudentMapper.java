@@ -12,8 +12,12 @@ public interface StudentMapper {
 
 	List<Student> selectAllByDeptNo(@Param("deptNo") String deptNo);
 
-	Student selectStudentByNo(String sno);
+	Student selectStudentByNo(@Param("sno") String sno);
 
 	int insertStudent(Student student);
-	
+
+	int updateStudent(Student student);
+
+	int deleteStudent(@Param("sno") String sno);
+
 }

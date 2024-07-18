@@ -2,4 +2,4 @@ server:
   port: 8088
 logging:
   level:
-    '[org.springframework.web.]': debug
+    '[org.springframework.web]': debug

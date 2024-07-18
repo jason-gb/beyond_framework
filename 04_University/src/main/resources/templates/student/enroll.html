@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 
 <html th:replace="~{layout/baseLayout :: layout(~{::title}, ~{::main})}" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>학생 등록</title>
-    </head>
-    <body>
-        <main>
-            <h3>학생 등록</h3>
+	<head>
+		<title>학생 등록</title>
+	</head>	
+	<body>
+		<main>
+			<h3>학생 등록</h3>
 
-            <form th:action="@{/student/enroll}" method="post">
-                <label for="deptNo">학과 : </label>
-                <select id="deptNo" name="deptNo">
-                    <option>-------선택-------</option>
-                            <option th:each="department : ${departments}"
-                                        th:value="${department.no}"
-                                        th:text="${department.name}">
-                            </option>
-                </select>
+			<form th:action="@{/student/enroll}" method="post">
+				<label for="deptNo">학과 : </label>
+				<select id="deptNo" name="deptNo">
+					<option>-------선택-------</option>
+							<option th:each="department : ${departments}"
+										th:value="${department.no}"
+										th:text="${department.name}">
+							</option>
+				</select>
+				
+				<br><br>
 
-                <br><br>
+						<label for="name">이름 : </label>
+						<input type="text	" id="name" name="name">
+						<br><br>
+						
+						<label for="ssn">주민등록 번호 : </label>
+						<input type="text" id="ssn" name="ssn" maxlength="14">
+						
+						<br><br>
 
-                        <label for="name">이름 : </label>
-                        <input type="text    " id="name" name="name">
-                        <br><br>
+						<lable for="address">주소 : </lable>
+						<input type="text" id="address" name="address" size="50	">
+						
+						<br><br>
+						
+						<input type="submit" value="등록">
+						<input type="reset" value="초기화">
 
-                        <label for="ssn">주민등록 번호 : </label>
-                        <input type="text" id="ssn" name="ssn" maxlength="14">
-
-                        <br><br>
-
-                        <lable for="address">주소 : </lable>
-                        <input type="text" id="address" name="address" size="50    ">
-
-                        <br><br>
-
-                        <input type="submit" value="등록">
-                        <input type="reset" value="초기화">
-
-
-            </form>
-        </main>
-    </body>
+								
+			</form>
+		</main>
+	</body>	
 </html>
