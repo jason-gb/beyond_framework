@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.beyond.department.mapper.DepartmentMapper">
+	<resultMap id="departmentResultMap" type="Department">
+		<id  property="no" column="department_no"/>
+		<result property="name" column="department_name" />
+		<result property="category" column="category" />
+		<result property="openYn" column="open_yn" />
+		<result property="capacity" column="capacity" />
+	</resultMap>
+	
+	<select id="selectDepartmentCount" resultType="_int">
+		select count(*) 
+		from tb_department
+		<where>
+			open_yn = #{openYn}
+		</where>
+	</select>
+
+	<select id="selectDepartments" resultMap="departmentResultMap">
+		SELECT department_no,
+			   department_name,
+			   category,
+			   open_yn,
+			   capacity
+		FROM tb_department
+		<if test="openYn != null">
+			WHERE open_yn = #{openYn}
+		</if>
+		ORDER BY department_name ASC
+	</select>	
+	
+</mapper>
