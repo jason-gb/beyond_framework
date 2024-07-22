@@ -9,6 +9,12 @@ public interface DepartmentService {
 
 	List<Department> getDepartments(int page, int numOfRows, String openYn);
 
+	Department getDepartmentByDeptNo(String deptNo);
+
+	int save(Department department);
+
+	int delete(String deptNo);
+
 
 	
 }

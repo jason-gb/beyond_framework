@@ -11,3 +11,9 @@ mybatis:
   type-aliases-package: com.beyond.department.vo
   mapper-locations:
   - classpath:mappers/**/*.xml
+
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+  paths-to-match:
+  - /v1/**

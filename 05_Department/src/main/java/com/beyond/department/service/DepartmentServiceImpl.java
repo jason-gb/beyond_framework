@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.beyond.department.mapper.DepartmentMapper;
 import com.beyond.department.vo.Department;
@@ -41,10 +42,41 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public int getTotalCount(String openYn) {
-		// TODO Auto-generated method stub
+		
 		return departmentMapper.selectDepartmentCount(openYn);
 	}
 
+	@Override
+	public Department getDepartmentByDeptNo(String deptNo) {
+		
+		return departmentMapper.selectDepartmentByDeptNo(deptNo);
+	}
+
+	@Override
+	@Transactional
+	public int save(Department department) {
+		int result = 0;
+		
+		if(department.getNo() != null) {
+			// update
+			result = departmentMapper.updateDepartment(department);
+		} else {
+			// insert
+			result = departmentMapper.insertDepartment(department);
+		}
+		
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public int delete(String deptNo) {
+		
+		
+		return departmentMapper.deleteDepartment(deptNo);
+	}
+
+	
 
 
 }
